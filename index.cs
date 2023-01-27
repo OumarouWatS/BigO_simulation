@@ -4,30 +4,7 @@ namespace Homework2
     using System.Diagnostics;
     internal class Program
     {
-        public static int start = 10000, N2 = 100000, N3 = 1000000, N4 = 10000000, N5 = 100000000, N6 = 1000000000;
-
-        // Disjoint array filler
-        public static int[] arrayFiller(int[] myArray, int start, int N)
-        {
-            for(int i=start; i <= N; i++)
-            {
-                myArray[i] = i+1;
-            }
-
-            return myArray;
-        }
-
-        // generates total_Ns number of Ns in the powers of 10 from start
-        public static int[] N_generator(int start, int total_Ns)
-        {
-            int[] myArray = new int[total_Ns];
-            for (int i=0; i<total_Ns; i++)
-            {
-                myArray[i] = start;
-                start *= 10;
-            }
-            return myArray;
-        }
+        public static int N1 =500;
 
         public static bool disjoint1(int[] groupA, int[] groupB, int[] groupC)
         {
@@ -46,55 +23,82 @@ namespace Homework2
                     if (a == b)
                         foreach (int c in groupC)
                             if (a == c)
+                            {
+                                Console.WriteLine("Found" + a + b + c);
                                 return false;
+                            }
             return true;
         }
 
 
         static void Main(string[] args)
         {
-            int N = 5;
+            int[] group1 = new int[N1];
+            int[] group2 = new int[N1];
+            int[] group3 = new int[N1];
 
-            int[] arrayOfNs = new int[N];
-            arrayOfNs = N_generator(start, N);;
 
-            int[][] group1 = new int[3][];
+            for (int i = 0; i < N1; i++) {
+                group1[i] = i+1;
+            }
 
-            // creates and initializes 3 groups of size arrayOfNs[0]
-            int j = 0;
-            int z = arrayOfNs[0];
-            for (int i = 0; i < group1.Length; i++)
+            for (int i = 0; i < N1; i++)
             {
-                group1[i] = new int[arrayOfNs[0]];
-                group1[i] = arrayFiller(group1[i], j, z);
-                j += arrayOfNs[0];
-                z += arrayOfNs[0];
+                group2[i] = i + 1 + N1;
+            }
+
+            for (int i = 0; i < N1; i++)
+            {
+                group3[i] = i + 1 + 2*N1;
+            }
+
+            for (int i = 0; i < N1; i++)
+            {
+                Console.WriteLine("Group1: " + group1[i]);
+            }
+            for (int i = 0; i < N1; i++)
+            {
+                Console.WriteLine("Group2: " + group2[i]);
+            }
+            for (int i = 0; i < N1; i++)
+            {
+                Console.WriteLine("Group3: " + group3[i]);
             }
 
 
             Stopwatch stopWatch = new Stopwatch();
+
+           
+            // a != b & b != c
+            stopWatch.Start();
+            disjoint1(group1, group2, group3);
+            stopWatch.Stop();
+
+            
+            // a == b & b != c
+            stopWatch.Start();
+            disjoint1(group1, group1, group3);
+            stopWatch.Stop();
+            
+            // a != b & b != c
+            stopWatch.Start();
+            disjoint2(group1, group2, group3);
+            stopWatch.Stop();
+
+            
+            // a == b & b != c
+            stopWatch.Start();
+            disjoint2(group1, group1, group3);
+            stopWatch.Stop(); 
+
+            // Get the elapsed time as a TimeSpan value.
             TimeSpan ts = stopWatch.Elapsed;
-            string elapsedTime1, elapsedTime2;
 
-
-            stopWatch.Start();
-            disjoint1(group1[0], group1[1], group1[2]);
-            stopWatch.Stop();
-
-            elapsedTime1 = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-            ts.Hours, ts.Minutes, ts.Seconds,
-            ts.Milliseconds / 10);
+            // Format and display the TimeSpan value.
+            string elapsedTime1 = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                ts.Hours, ts.Minutes, ts.Seconds,
+                ts.Milliseconds / 10);
             Console.WriteLine("RunTime " + elapsedTime1);
-
-
-            stopWatch.Start();
-            disjoint1(group1[0], group1[1], group1[2]);
-            stopWatch.Stop();
-
-            elapsedTime2 = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-            ts.Hours, ts.Minutes, ts.Seconds,
-            ts.Milliseconds / 10);
-            Console.WriteLine("RunTime " + elapsedTime2);
 
         }
     }
